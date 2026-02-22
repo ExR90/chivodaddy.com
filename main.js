@@ -30,9 +30,18 @@ const formNote = document.getElementById('formNote');
 form?.addEventListener('submit', (e) => {
   e.preventDefault();
   const btn = form.querySelector('.btn-submit');
+  formNote.textContent = '';
+
+  // Verify Turnstile captcha is completed
+  const turnstileResponse = form.querySelector('[name="cf-turnstile-response"]');
+  if (!turnstileResponse || !turnstileResponse.value) {
+    formNote.textContent = '⚠️ Please complete the captcha verification first, partner.';
+    formNote.style.color = '#C62828';
+    return;
+  }
+
   btn.textContent = 'Sending…';
   btn.disabled = true;
-  formNote.textContent = '';
 
   fetch('https://formsubmit.co/ajax/victor.lopez84@live.com', {
     method: 'POST',
@@ -45,6 +54,7 @@ form?.addEventListener('submit', (e) => {
       formNote.textContent = '🤠 Much obliged, partner! The Chivo Daddy will be in touch soon.';
       formNote.style.color = '#2E7D32';
       form.reset();
+      if (typeof turnstile !== 'undefined') turnstile.reset();
     } else {
       formNote.textContent = '⚠️ Something went wrong, partner. Try again or give us a call.';
       formNote.style.color = '#C62828';
