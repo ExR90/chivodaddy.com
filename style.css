@@ -230,119 +230,90 @@ img { max-width: 100%; display: block; }
   color: #fff;
 }
 
-/* ---- CSS Goat Art ---- */
+/* ---- Hero Video Frame ---- */
 .hero-art {
   position: relative;
   z-index: 2;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.goat-silhouette {
+.video-frame {
   position: relative;
-  width: 280px;
-  height: 300px;
-  filter: drop-shadow(0 10px 30px rgba(240,165,0,0.4));
-  animation: goatBob 3s ease-in-out infinite;
+  /* Wanted-poster tilt */
+  transform: rotate(2deg);
+  transition: transform 0.3s ease;
 }
 
-@keyframes goatBob {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-12px); }
+.video-frame:hover {
+  transform: rotate(0deg) scale(1.02);
 }
 
-/* Body */
-.goat-body {
-  position: absolute;
-  bottom: 60px; left: 50px;
-  width: 180px; height: 110px;
-  background: var(--tan);
-  border-radius: 50% 60% 50% 40% / 50% 50% 60% 50%;
-}
-
-/* Head */
-.goat-head {
-  position: absolute;
-  bottom: 155px; left: 160px;
-  width: 80px; height: 70px;
-  background: var(--tan);
-  border-radius: 45% 55% 40% 60% / 55% 45% 55% 45%;
-}
-
-/* Ears */
-.goat-ear {
-  position: absolute;
-  width: 28px; height: 18px;
-  background: #c8935a;
-  border-radius: 50%;
-}
-.goat-ear.left  { bottom: 210px; left: 152px; transform: rotate(-30deg); }
-.goat-ear.right { bottom: 215px; left: 225px; transform: rotate(20deg); }
-
-/* Horns */
-.goat-horn {
-  position: absolute;
-  width: 10px; height: 36px;
-  background: var(--brown);
-  border-radius: 5px 5px 0 0;
-}
-.goat-horn.left  { bottom: 225px; left: 168px; transform: rotate(-15deg); }
-.goat-horn.right { bottom: 228px; left: 212px; transform: rotate(15deg); }
-
-/* Beard */
-.goat-beard {
-  position: absolute;
-  bottom: 140px; left: 228px;
-  width: 12px; height: 24px;
-  background: #c8935a;
-  border-radius: 0 0 50% 50%;
-}
-
-/* Cowboy Hat */
-.goat-hat {
-  position: absolute;
-  bottom: 218px; left: 163px;
-  width: 74px; height: 40px;
-  background: var(--rust);
-  border-radius: 6px 6px 0 0;
-}
-.goat-hat::after {
+/* Outer gold border layer */
+.video-frame::before {
   content: '';
   position: absolute;
-  top: 12px; left: 8px;
-  width: 58px; height: 8px;
+  inset: -10px;
   background: var(--gold);
-  border-radius: 2px;
+  border-radius: 4px;
+  z-index: -1;
+  box-shadow:
+    0 0 0 4px var(--gold-dark),
+    0 0 0 8px var(--brown),
+    0 0 0 12px var(--gold),
+    0 8px 40px rgba(0,0,0,0.6),
+    0 0 60px rgba(240,165,0,0.25);
 }
 
-.goat-hat-brim {
-  position: absolute;
-  bottom: 215px; left: 150px;
-  width: 100px; height: 10px;
-  background: var(--rust);
-  border-radius: 50%;
-}
-
-/* Legs */
-.goat-leg {
-  position: absolute;
-  width: 20px; height: 55px;
-  background: var(--tan);
-  border-radius: 4px 4px 6px 6px;
-  bottom: 8px;
-}
-.goat-leg.fl { left: 75px; }
-.goat-leg.fr { left: 108px; }
-.goat-leg.bl { left: 170px; }
-.goat-leg.br { left: 200px; }
-
-/* Hooves */
-.goat-leg::after {
+/* Inner dark mat */
+.video-frame::after {
   content: '';
   position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 12px;
+  inset: -4px;
   background: var(--brown);
-  border-radius: 0 0 6px 6px;
+  border-radius: 3px;
+  z-index: -1;
+}
+
+/* Corner ornaments */
+.video-frame-corners { pointer-events: none; }
+
+.vfc {
+  position: absolute;
+  font-size: 1.2rem;
+  color: var(--gold);
+  z-index: 2;
+  line-height: 1;
+  text-shadow: 0 0 8px rgba(240,165,0,0.8);
+}
+.vfc.tl { top: 4px;  left: 5px;  }
+.vfc.tr { top: 4px;  right: 5px; }
+.vfc.bl { bottom: 32px; left: 5px;  }
+.vfc.br { bottom: 32px; right: 5px; }
+
+/* The video itself */
+.hero-video {
+  display: block;
+  width: 240px;          /* fixed width; height auto from 9:16 ratio */
+  height: 426px;         /* 240 × (16/9) = 426 — fills the vertical frame */
+  object-fit: cover;
+  border-radius: 2px;
+  background: var(--dark);
+}
+
+/* Caption bar — like a wanted poster label */
+.video-frame-label {
+  background: var(--rust);
+  color: var(--gold);
+  font-family: 'Rye', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-align: center;
+  padding: 0.35rem 0.5rem;
+  border-top: 2px solid var(--gold-dark);
+  text-shadow: 1px 1px 0 var(--dark);
 }
 
 /* Scroll hint */
@@ -971,7 +942,9 @@ img { max-width: 100%; display: block; }
   .contact-grid       { grid-template-columns: 1fr; }
   .hero               { text-align: center; flex-direction: column; }
   .hero-cta-group     { justify-content: center; }
-  .hero-art           { display: none; }
+  .hero-art           { display: flex; }
+  .hero-video         { width: 180px; height: 320px; }
+  .video-frame        { transform: rotate(0deg); }
 }
 
 @media (max-width: 640px) {
