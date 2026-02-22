@@ -23,7 +23,7 @@ window.addEventListener('scroll', () => {
     : '0 2px 12px rgba(0,0,0,0.35)';
 });
 
-// ---- Contact form ----
+// ---- Contact form (via Formsubmit.co) ----
 const form     = document.getElementById('contactForm');
 const formNote = document.getElementById('formNote');
 
@@ -32,15 +32,32 @@ form?.addEventListener('submit', (e) => {
   const btn = form.querySelector('.btn-submit');
   btn.textContent = 'Sending…';
   btn.disabled = true;
+  formNote.textContent = '';
 
-  // Simulate send (swap with real endpoint when ready)
-  setTimeout(() => {
-    formNote.textContent = '🤠 Much obliged, partner! The Chivo Daddy will be in touch soon.';
-    formNote.style.color = '#2E7D32';
+  fetch('https://formsubmit.co/ajax/victor.lopez84@live.com', {
+    method: 'POST',
+    headers: { 'Accept': 'application/json' },
+    body: new FormData(form)
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      formNote.textContent = '🤠 Much obliged, partner! The Chivo Daddy will be in touch soon.';
+      formNote.style.color = '#2E7D32';
+      form.reset();
+    } else {
+      formNote.textContent = '⚠️ Something went wrong, partner. Try again or give us a call.';
+      formNote.style.color = '#C62828';
+    }
+  })
+  .catch(() => {
+    formNote.textContent = '⚠️ Could not send — check your connection and try again.';
+    formNote.style.color = '#C62828';
+  })
+  .finally(() => {
     btn.textContent = 'Send It, Pardner 🤠';
     btn.disabled = false;
-    form.reset();
-  }, 1200);
+  });
 });
 
 // ---- Scroll-reveal ----
